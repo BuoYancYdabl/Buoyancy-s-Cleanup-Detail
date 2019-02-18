@@ -3,7 +3,7 @@
 -- desc:   You are a janitor! Cleanup a place!
 -- script: lua
 -- saveid: MD9goto/0000
--- ver:    0.0.0
+-- ver:    0.0.0 Pre-Alpha
 
 ----------------------------------------
 --players config:
@@ -108,7 +108,7 @@ shellsSpawner=0,
 
 local t=0
 local bloodRemain=0
-local version="Pre-alpha 0.0.0"
+local version="Pre-Alpha 0.0.0"
 local build=0
 
 function overlay()
