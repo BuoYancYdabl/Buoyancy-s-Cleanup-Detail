@@ -15,3 +15,7 @@ please make a issue in Issues tab. Also in issues you can show me some features
 that you want to be in game. Maybe i will add it.
 
 You can view source code and download a game in file watching or a releases.
+
+Idea taken for a game: https://store.steampowered.com/app/246900/Viscera_Cleanup_Detail/
+Developer of TIC-80: https://github.com/nesbox
+All right reserver (c).
