@@ -8,6 +8,8 @@ https://github.com/BuoYancYdabl/Buoyancy-s-Cleanup-Detail/blob/master/CONTRIBUTI
 
 For launch .tic format files you need a TIC-80. You can download it at https://github.com/nesbox/TIC-80
 
+We have a discord server for you that you can join to watch announcements and be able to talk with community: https://discord.gg/7tdRpR2
+
 Game in early-access (v0.0.0 Pre Alpha). If you will find some issues
 please make a issue in Issues tab. Also in issues you can show me some features
 that you want to be in game. Maybe i will add it.
