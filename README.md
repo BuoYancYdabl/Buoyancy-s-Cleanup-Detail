@@ -3,6 +3,8 @@ Game about cleaning a facility. But this isnt a common facility...
 
 **Game contain inapropriate graphics: blood, slaughter, war-posible thematic!**
 
+If you downloading game from code be patient: game has old version anyways. I updating game right in tic. If you want to play it with new features wait for new release. Thank you for patience!
+
 Please make sure that you read [code of conduct](https://github.com/BuoYancYdabl/Buoyancy-s-Cleanup-Detail/blob/master/CODE_OF_CONDUCT.md),
 [contributing](https://github.com/BuoYancYdabl/Buoyancy-s-Cleanup-Detail/blob/master/CONTRIBUTING.md) and also accept a [license](https://github.com/BuoYancYdabl/Buoyancy-s-Cleanup-Detail/blob/master/LICENSE).
 
