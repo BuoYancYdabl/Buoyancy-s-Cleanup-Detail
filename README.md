@@ -1,7 +1,7 @@
 # Buoyancy-s-Cleanup-Detail
 Game about cleaning a facility. But this isnt a common facility...
 
-**Game contain inapropriate graphics: blood, slaughter, war-posible thematic!**
+**Game contain inapropriate graphics: blood, slaughter, strong language and war-posible thematic!**
 
 If you downloading game from code be patient: game has old version anyways. I updating game right in tic. If you want to play it with new features wait for new release. Thank you for patience!
 
