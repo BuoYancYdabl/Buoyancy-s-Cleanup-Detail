@@ -1,4 +1,3 @@
---```lua
 -- title:  BuoYancY's Cleanup Detail
 -- author: BuoYancY_dabl
 -- desc:   You are a janitor! Cleanup a place!
@@ -920,4 +919,3 @@ function TIC()
 	end
 	func_disable()
 end
---```
