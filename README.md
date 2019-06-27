@@ -13,8 +13,11 @@ For launch .tic format files you need a [TIC-80](https://github.com/nesbox/TIC-8
 We have a [discord](https://discord.gg/7tdRpR2) server for you that you can join to watch announcements and be able to talk with community.
 
 Game in early-access (v0.0.0 Pre Alpha). If you will find some issues
-please make a issue in Issues tab. Also in issues you can show me some features
+please make an issue in Issues tab. Also in issues you can show me some features
 that you want to be in game. Maybe i will add it.
+
+All showcase videos:
+v 0.0.0 Alpha: https://youtu.be/to9oLA4Oyr8
 
 You can view source code and download a game in file watching or a releases.
 
