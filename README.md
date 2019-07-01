@@ -17,7 +17,7 @@ please make an issue in Issues tab. Also in issues you can show me some features
 that you want to be in game. Maybe i will add it.
 
 All showcase videos:
-[v 0.0.1 Beta:](https://youtu.be/to9oLA4Oyr8)
+[v 0.0.1 Beta](https://youtu.be/to9oLA4Oyr8)
 
 You can view source code and download a game in file watching or a releases.
 
