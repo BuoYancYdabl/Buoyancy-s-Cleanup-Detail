@@ -1,0 +1,1 @@
+All the sounds should be imported by hand. To do so open 'waveforms.txt' and copy each line to waveforms channel. Then open sounds.txt and do the same to regular SFX tab, but start from 1 sfx index.
