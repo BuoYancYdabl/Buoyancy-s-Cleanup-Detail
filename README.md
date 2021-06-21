@@ -1,6 +1,6 @@
 # Buoyancy-s-Cleanup-Detail
 Game about cleaning a facility. But this isnt a common facility...
-Current game version: 1.0.0 TIC-80 version: 0.70 (May be higher, but not lower).
+Current game version: 1.0.1 TIC-80 version: 0.70 (May be higher, but not lower).
 Last [release](https://github.com/BuoYancYdabl/Buoyancy-s-Cleanup-Detail/releases/tag/v.1.0.0-update)
 
 **Game contain inapropriate graphics: blood, slaughter and war-posible thematic!**
