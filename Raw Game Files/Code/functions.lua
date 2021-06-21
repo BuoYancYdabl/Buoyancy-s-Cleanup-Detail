@@ -2,28 +2,6 @@
 ------------functions bank--------------
 ----------------------------------------
 
---changing camera position acording to player coordinates making a chasing camera
-function cameraMovement()
- if main.game==true then
-		if mapc.camX~=p.x or mapc.camY~=p.y then
-   mapc.camVX=(p.x-mapc.camX)/10
-			mapc.camVY=(p.y-mapc.camY)/10
-
-   mapc.camX=mapc.camX+mapc.camVX
-	 	mapc.camY=mapc.camY+mapc.camVY
-
-   if mapc.camVX<0.1 and mapc.camVX>-0.1 then
-	 	 mapc.camVX=0
-		 	mapc.camX=p.x
-	 	end
-	 	if mapc.camVY<0.1 and mapc.camVY>-0.1 then
-			 mapc.camVY=0
-				mapc.camY=p.y
-			end
-		end
- end
-end
-
 --checking if blood spawns over map or solids objects. also using as checking everything
 function collide(x,y)
  return solids[mget((x)//8,(y)//8)]
@@ -136,14 +114,6 @@ function overlay()
 		 textlenght[11]=print("Progress?",45-textlenght[11]//2,85,0)
 		elseif settings.page==2 then
 		 textlenght[6]=print("Controls:",45-textlenght[6]//2,21,0)
-			textlenght[9]=print("Enable",45-textlenght[9]//2,69,0)
-			textlenght[10]=print("Config?",45-textlenght[10]//2,77,0)
-			if main.isConfig==false then
-			 var="No"
-			else
-			 var="Yes"
-			end
-			textlenght[11]=print(var,45-textlenght[11]//2,85,0)
 			if main.isPc==false then
 		  var="Android"
  		else
@@ -157,12 +127,6 @@ function overlay()
 			 var="No"
 			end
 			textlenght[7]=print(var,45-textlenght[7]//2,53,0)
-		end
-		if settings.page>1 then
-		 spr(14,54,119)
-		end
-		if settings.page<2 then
-		 spr(14,64,119,-1,1,1)
 		end
 	elseif main.tablet==true then
 	 cls()
@@ -215,9 +179,9 @@ function overlay()
 		elseif tablet.note==true then
 	  for i=40,100,8 do
 		 	line(60,i+6,178,i+6,8)
-		  if notes_buffer[(tablet.page-1)*8+(i//8-4)-1]~=nil then
-		   print(notes_buffer[(tablet.page-1)*8+(i//8-4)-1],60,i,8)
-				end
+		  if notes_buffer[(tablet.page-1)*8+(i//8-4)]~=nil then
+		   print(notes_buffer[(tablet.page-1)*8+(i//8-4)],60,i,8)
+ 	  end
 			end
 	 elseif tablet.base==true then
 		 if tablet.baseChoose==0 then
@@ -308,7 +272,19 @@ function overlay()
  	for i=1,m.totalButtons do
 	  if btns[i][11]==m.dem and btns[i][12]==true then
 			 if main.tablet==false then
-		 	 spr(btns[i][5],btns[i][1],btns[i][2],btns[i][6],btns[i][7],0,btns[i][8],btns[i][9],btns[i][10])
+					if main.settings==true then
+		 			if btns[i][5]==14 and btns[i][8]==2 and settings.page==settings.maxpages then
+	 	 		 btns[i][7]=0
+		 	 	elseif btns[i][5]==14 and btns[i][8]==2 and settings.page<settings.maxpages then
+			 	  btns[i][7]=1
+	 	 	 end
+		 			if btns[i][5]==14 and btns[i][8]==0 and settings.page==settings.maxpages then
+	 	 		 btns[i][7]=1
+		 	 	elseif btns[i][5]==14 and btns[i][8]==0 and settings.page<settings.maxpages then
+			 	  btns[i][7]=0
+		 	  end
+					end
+					spr(btns[i][5],btns[i][1],btns[i][2],btns[i][6],btns[i][7],0,btns[i][8],btns[i][9],btns[i][10])
 				elseif btns[i][13]==tablet.dem or btns[i][13]==-1 then
 					if tablet.dem~=3 or btns[i][5]~=386 or i==22 then
 				 	spr(btns[i][5],btns[i][1],btns[i][2],btns[i][6],btns[i][7],0,btns[i][8],btns[i][9],btns[i][10])
@@ -318,133 +294,118 @@ function overlay()
 	 end
 	end
 	if keyboard.isCalled==true then
-	 if main.isPc==false then
- 		if main.tablet==true then
-	 	 cls()
-		 end
- 	 rect(0,30,240,106,13)
-	 	line(0,50,240,50,0)
-		 for i=10,220,22 do
-		  if keyboard.pressed==keypKeys[i//22+1] and m.tl==false then
-			  var=44
- 			else
-	 		 var=42
-		 	end
-		  spr(var,i,56,11,1,0,0,2,2)
- 		end
-	 	for i=21,200,22 do
-		  if keyboard.pressed==keypKeys[i//22+11] and m.tl==false then
-			  var=44
- 			else
-	 		 var=42
-		 	end
-		  spr(var,i,78,11,1,0,0,2,2)
- 		end
-	 	for i=10,190,22 do
-		  if keyboard.pressed==keypKeys[i//22+19] and m.tl==false and i~=10 then
-			  var=44
- 			elseif keyboard.isShift==true and i==10 then
-		 	 var=44
-	 		elseif keyboard.pressed=="BS" and i==186 then
-			  var=44
- 			else
-	 		 var=42
-		 	end
-		  spr(var,i,100,11,1,0,0,2,2)
- 		end
-	 	if keyboard.pressed=="space" then
-		  var1=44
-			 var2=45
- 			var3=75
-	 	else
-		  var1=42
-			 var2=43
-			 var3=74
- 		end
-	 	if keyboard.isShift==true then
-		  var4=2
- 		else
-	 	 var4=0
-		 end
- 		for i=84,164,8 do
-	  	spr(var3,i,120,11,1,0,0,1,2)
-		 end
- 		spr(var1,76,120,11,1,0,0,1,2)
-	 	spr(var2,172,120,11,1,0,0,1,2)
-		 spr(107,208,84,11,1,0,0,3,4)
- 		spr(76,14,103+var4,11)
-	 	spr(42,197,120,11,1,0,0,2,2)
-		 if keyboard.isNumeric==false then
-		  var=0
- 		else
-	 	 var=2
-		 end
- 		spr(42+var,21,120,11,1,0,0,2,2)
-	 	print("EC",199,122,3)
-		 print("FN",23,122+var,3)
- 		for i=10,220,22 do
-	 	 if keyboard.pressed==keypKeys[i//22+1] and m.tl==false then
-		 	 var=2
-			 else
-			  var=0
- 			end
-	 		if keyboard.isNumeric==false then
-		   print(keypKeys[i//22+1],i+2,58+var,3)
-		  else
-			  if (i//22+1)==10 then
-				  var1=0
- 				else
-	 			 var1=i//22+1
-		 		end
-			  print(var1,i+2,58+var,3)
- 			end
-	 	end
-		 for i=21,212,22 do
-		  if keyboard.pressed==keypKeys[i//22+11] and m.tl==false then
-			  var=2
- 			else
-	 		 var=0
-		 	end
-		  print(keypKeys[i//22+11],i+2,80+var,3)
-	 	end
-		 for i=32,190,22 do
-		  if keyboard.pressed==keypKeys[i//22+19] and m.tl==false then
-			  var=2
- 			else
-	 		 var=0
-		 	end
-		  print(keypKeys[i//22+19],i+2,102+var,3)
- 		end
-	 	if t%60>30 then
-		  line(keyboard.cursor,32,keyboard.cursor,46,0)
-			 line(keyboard.cursor-1,32,keyboard.cursor+1,32,0)
- 			line(keyboard.cursor-1,46,keyboard.cursor+1,46,0)
-	 	end
-		 print(keyboard.text,8,34,0,false,2)
- 	else
-		 if t%60>30 and main.tablet==false then
-		  line(keyboard.cursor,28,keyboard.cursor,34,0)
-				line(keyboard.cursor-1,28,keyboard.cursor+1,28,0)
- 			line(keyboard.cursor-1,34,keyboard.cursor+1,34,0)
-			elseif t%60>30 and main.tablet==true then
-			 line(keyboard.cursor,notes_num%8*8+39,keyboard.cursor,notes_num%8*8+45,8)
-				line(keyboard.cursor-1,notes_num%8*8+39,keyboard.cursor+1,notes_num%8*8+39,8)
- 			line(keyboard.cursor-1,notes_num%8*8+45,keyboard.cursor+1,notes_num%8*8+45,8)
-	 	end
+	 if main.tablet==true then
+		 cls()
 		end
-	 if messageReport.timer>time() then
-	  textlenght[13]=print(messageReport.msg,120-textlenght[13]//2,100,messageReport.clr)
-	 end
+	 rect(0,30,240,106,13)
+		line(0,50,240,50,0)
+		for i=10,220,22 do
+		 if keyboard.pressed==keypKeys[i//22+1] and m.tl==false then
+			 var=44
+			else
+			 var=42
+			end
+		 spr(var,i,56,11,1,0,0,2,2)
+		end
+		for i=21,200,22 do
+		 if keyboard.pressed==keypKeys[i//22+11] and m.tl==false then
+			 var=44
+			else
+			 var=42
+			end
+		 spr(var,i,78,11,1,0,0,2,2)
+		end
+		for i=10,190,22 do
+		 if keyboard.pressed==keypKeys[i//22+19] and m.tl==false and i~=10 then
+			 var=44
+			elseif keyboard.isShift==true and i==10 then
+			 var=44
+			elseif keyboard.pressed=="BS" and i==186 then
+			 var=44
+			else
+			 var=42
+			end
+		 spr(var,i,100,11,1,0,0,2,2)
+		end
+		if keyboard.pressed=="space" then
+		 var1=44
+			var2=45
+			var3=75
+		else
+		 var1=42
+			var2=43
+			var3=74
+		end
+		if keyboard.isShift==true then
+		 var4=2
+		else
+		 var4=0
+		end
+		for i=84,164,8 do
+	 	spr(var3,i,120,11,1,0,0,1,2)
+		end
+		spr(var1,76,120,11,1,0,0,1,2)
+		spr(var2,172,120,11,1,0,0,1,2)
+		spr(107,208,84,11,1,0,0,3,4)
+		spr(76,14,103+var4,11)
+		spr(42,197,120,11,1,0,0,2,2)
+		if keyboard.isNumeric==false then
+		 var=0
+		else
+		 var=2
+		end
+		spr(42+var,21,120,11,1,0,0,2,2)
+		print("EC",199,122,3)
+		print("FN",23,122+var,3)
+		for i=10,220,22 do
+		 if keyboard.pressed==keypKeys[i//22+1] and m.tl==false then
+			 var=2
+			else
+			 var=0
+			end
+			if keyboard.isNumeric==false then
+		  print(keypKeys[i//22+1],i+2,58+var,3)
+		 else
+			 if (i//22+1)==10 then
+				 var1=0
+				else
+				 var1=i//22+1
+				end
+			 print(var1,i+2,58+var,3)
+			end
+		end
+		for i=21,212,22 do
+		 if keyboard.pressed==keypKeys[i//22+11] and m.tl==false then
+			 var=2
+			else
+			 var=0
+			end
+		 print(keypKeys[i//22+11],i+2,80+var,3)
+		end
+		for i=32,190,22 do
+		 if keyboard.pressed==keypKeys[i//22+19] and m.tl==false then
+			 var=2
+			else
+			 var=0
+			end
+		 print(keypKeys[i//22+19],i+2,102+var,3)
+		end
+		if t%60>30 then
+		 line(keyboard.cursor,32,keyboard.cursor,46,0)
+			line(keyboard.cursor-1,32,keyboard.cursor+1,32,0)
+			line(keyboard.cursor-1,46,keyboard.cursor+1,46,0)
+		end
+		print(keyboard.text,8,34,0,false,2)
 	end
-	if main.isConfig==true then
- 	textlenght[1]=print(version,120-textlenght[1]//2,0)
-	 if main.game==true or main.inventory==true or main.tablet==true then
-	  var=14
- 	else
-	  var=4
- 	end
-	 print("fps: "..fps.value,200,0,var)
- end
+	if messageReport.timer>time() then
+	 textlenght[13]=print(messageReport.msg,120-textlenght[13]//2,100,messageReport.clr)
+	end
+	if main.game==true or main.inventory==true or main.tablet==true then
+	 var=14
+	else
+	 var=4
+	end
+	print("fps: "..fps.value,200,0,var)
 end
 
 --when player choose map
@@ -607,141 +568,6 @@ function generation()
 	end
 end
 
---checking for player inputs
-function getControls()
- if btnp(7) and btn(0) and btn(2) then exit() end
- m.x,m.y,m.bl,m.bm,m.br=mouse()
-
-	if keyboard.isCalled==true then
-	 keyboard_action()
-	end
-
- --detecting player mouse presings
- if m.bl==true and m.tl==true then	
-		if mapc.generating==false or main.menu==true or main.mapChoose==true or main.tablet==true or main.settings==true then
-			if keyboard.isCalled==false then
-				if m.bl==true and p.use=="" and main.isPc==true then
-	 	  p.animTimer=time()+500
- 	   p.use="prim"
-  	  player_isDo(p.isMop,p.isHands,p.isDetector,p.isTablet,p.use)
-    end
-		 end
-			m.tl=false
-			if keyboard.isCalled==false or main.isPc==true then
-	   for i=1,m.totalButtons do
-		   if m.x>btns[i][1] and m.x<btns[i][1]+btns[i][3] and m.y>btns[i][2] and m.y<btns[i][2]+btns[i][4] and btns[i][11]==m.dem then
-			   if main.tablet==false and main.settings==false then
-		 			 m.ind=i
- 	 	 		buttonsCheck()
-	 	   	break
-		 			elseif main.tablet==true and btns[i][13]==tablet.dem or btns[i][13]==-1 then
-			 			m.ind=i
-				 		buttonsCheck()
-					  break
- 					elseif main.settings==true and btns[i][13]==settings.page or btns[i][13]==-1 then
-	 			  m.ind=i
-		 				buttonsCheck()
-				 		break
-					 end
- 				end
-  		end
-	  end
-  end
-	end
-	if m.br==true and m.tr==true then
-	 if m.br==true and p.use=="" and main.isPc==true and p.isMop==false then
-	  p.animTimer=time()+500
- 	 p.use="alt"
-	  player_isDo(p.isMop,p.isHands,p.isDetector,p.isTablet,p.use)
-	 end
-		m.tr=false
-	end
-	if main.game==true then
-	 if main.isPc==false then
-		 if mapc.generating==false and keyboard.isCalled==false then
-    if btn(0) then
-	    p.vy=-1
- 		  p.angle=2
-   	elseif btn(1) then
-	    p.vy=1
-		   p.angle=0
-   	else
-	    p.vy=0
- 	  end
- 	  if btn(2) then
-	    p.vx=-1
- 		  p.angle=1
-   	elseif btn(3) then
-	   	p.vx=1
-	   	p.angle=3
-  		else
-	    p.vx=0
- 	  end
- 	 	if btnp(4) and p.use=="" then
- 	 	 p.animTimer=time()+500
-	 	 	p.use="prim"
-		 	 player_isDo(p.isMop,p.isHands,p.isDetector,p.isTablet,p.use)
- 		 elseif btnp(5) and p.use=="" and p.isMop==false then
-	 	  p.animTimer=time()+500
- 		 	p.use="alt"
-	 	  player_isDo(p.isMop,p.isHands,p.isDetector,p.isTablet,p.use)
- 	  elseif btnp(6) and p.use=="" then
-					p.use="use"
-					if p.isMop==true then
-					 p.animTimer=time()+500
-					end
-					player_isDo(p.isMop,p.isHands,p.isDetector,p.isTablet,p.use)
-				end
-	 	 if btnp(7) and p.use=="" and p.isHold==false then
-		   player_changeInstrument()
-  		end
-	  end
-	 else
- 	 if mapc.generating==false and keyboard.isCalled==false then
-    if key(23) then
-	    p.vy=-1
- 		  p.angle=2
-   	elseif key(19) then
-	    p.vy=1
-		   p.angle=0
-  	 else
- 	   p.vy=0
-  	 end
- 	  if key(1) then
-	    p.vx=-1
- 		  p.angle=1
-   	elseif key(4) then
-	   	p.vx=1
-	   	p.angle=3
-  		else
-	    p.vx=0
- 	  end
-	 	 if keyp(17) and p.use=="" and p.isHold==false then
-		   player_changeInstrument()
-  		end
-				if keyp(5) and p.use=="" then
-				 p.use="use"
-					if p.isMop==true then
-					 p.animTimer=time()+500
-					end
-					player_isDo(p.isMop,p.isHands,p.isDetector,p.isTablet,p.use)
-	   end
-			end
-	 end
-	end
-end
-
---counting fps
-function getFps()
- if fps.timer>time() then
-	 fps.count=fps.count+1
-	else
-	 fps.timer=time()+1000
-	 fps.value=fps.count
-		fps.count=0
-	end
-end
-
 --massive function that checking player and objects collisions
 function collisionCheck()
  p.sx,p.sy=p.x+p.vx,p.y+p.vy
@@ -768,28 +594,6 @@ function collisionCheck()
 	end
 end
 
---executing when player stand still to prevent loss of performance
-function collisionLauncher()
- if main.game==true then
-		if p.vx~=0 or p.vy~=0 then
-	  p.isMove=true
- 	else
-	  p.isMove=false
- 	end
-
-  if p.vx~=0 or p.vy~=0 then
-   collisionCheck()
-			if bloodTotal<bloodLimit and p.isMove==true then
-	  	func_footprint()
-			end
-	 end
-
-  p.x=p.x+p.vx
-	 p.y=p.y+p.vy
-	end
-end
-
---plays sounds when called. Has ability to play sounds in different pitch range (diap1,diap2)
 function sfxPlay(id,note,dur,channel,vol,speed,diap1,diap2)
 	if diap1~=nil and diap2~=nil then
 		varSfx1=""..string.char(string.byte(diap1,1))..string.char(string.byte(diap1,2))
@@ -847,7 +651,7 @@ function buttonsCheck()
 		main.game=true
 		sync(1,0,false)
 		sync(2,0,false)
-		sync(4,1,false)
+		sync(4,0,false)
 		sync(32,0,false)
 		bloodTotal=pset_blood
  	if bloodTotal<1 then
@@ -1144,7 +948,7 @@ function buttonsCheck()
 	 	end
  	end
 	 solids[0]=true
- 	for i=64,127 do
+ 	for i=64,109 do
 	  solids[i]=true
  	end
 	 for i=2,14,12 do
@@ -1187,12 +991,12 @@ function buttonsCheck()
 		main.menu=true
 	elseif m.ind==9 then
 	 if settings.page==1 then
-	 	if settings.sounds==true then
-		  sfxPlay(8,"F-4",-1,0,15,1)
- 		end
+		 if settings.sounds==true then
+	 	 sfxPlay(8,"F-4",-1,0,15,1)
+	 	end
 	  keyboard.isCalled=true
- 	 keyboard.text=nickname
-  	keyboard.maximal_string=12
+ 		keyboard.text=nickname
+ 		keyboard.maximal_string=12
 	 	keyboard.id=1
 	 end
 	elseif m.ind==10 then
@@ -1271,18 +1075,13 @@ function buttonsCheck()
 				 if settings.sounds==true then
 					 sfxPlay(8,"F-4",-1,0,15,1)
 					end
-				 notes_num=i//8-4+(tablet.page-1)*8-1
+				 notes_num=i//8-4+(tablet.page-1)*8
 					keyboard.isCalled=true
-	   	keyboard.text=notes_buffer[i//8-4+(tablet.page-1)*8-1]
-	   	if keyboard.text==nil then
-					 keyboard.text=""
-					end
-					keyboard.maximal_string=20
+	   	keyboard.text=notes_buffer[i//8-4+(tablet.page-1)*8]
+	   	keyboard.maximal_string=20
 	   	keyboard.id=2
-					if main.isPc==false then
- 					sync(1,6,false)
-	 				sync(32,6,false)
-				 end
+					sync(1,6,false)
+					sync(32,6,false)
 				end
 			end
 		end
@@ -1410,18 +1209,18 @@ function buttonsCheck()
 		tablet.totalPages=11
 		tablet.page=1
 	elseif m.ind==23 then
-		if settings.sounds==true then
-		 sfxPlay(8,"F-4",-1,0,15,1)
+		if settings.page<settings.maxpages then
+ 	 settings.page=settings.page+1
+			if settings.sounds==true then
+		  sfxPlay(8,"F-4",-1,0,15,1)
+	  end
 	 end
-		if settings.page<2 then
-	  settings.page=settings.page+1
-		end
 	elseif m.ind==24 then
-		if settings.sounds==true then
-		 sfxPlay(8,"F-3",-1,0,15,1)
-	 end
 		if settings.page>1 then
 		 settings.page=settings.page-1
+			if settings.sounds==true then
+		  sfxPlay(8,"F-3",-1,0,15,1)
+	  end
 		end
 	elseif m.ind==25 then
 	 if settings.sounds==false then
@@ -1440,66 +1239,18 @@ function buttonsCheck()
 		main.game=true
 	elseif m.ind==27 then
 	 reset()
- elseif m.ind==28 then
-	 if settings.sounds==true then
-		 sfxPlay(8,"F-4",-1,0,15,1)
-		end
-		if main.isConfig==false then
-		 main.isConfig=true
-			pmem(252,1)
-		else
-		 main.isConfig=false
-			pmem(252,0)
-	 end
-	end
+ end
 end
 
---this just single used text. Totaly useless! But do not delete it, this may cause disapearing "Instruments: " text in the game instrument tab
+--this just single used text. Totaly useless!
 function otherStuff()
  instr="Instrument: "
 end
 
---calls the message on the screen
 function message(msg1,clr1)
  messageReport.msg=msg1
 	messageReport.clr=clr1
 	messageReport.timer=time()+5000
-end
-
---has all checking uncategorized stuff
-function mainActivity()
-
- --all separate screens in game has their own id. This check if player change the screen
-	if main.menu==true then
-	 m.dem=1
-	elseif main.mapChoose==true then
-	 m.dem=2
-	elseif main.game==true then
-	 m.dem=0
-	elseif main.tablet==true then
-	 m.dem=3
-	elseif main.settings==true then
-	 m.dem=4
-	elseif main.inventory==true then
-	 m.dem=5
-	elseif main.pause==true then
-	 m.dem=6
-	end
-
- t=t+1
-
- --generates the map
-	if mapc.generating==true and main.game==true then
-	 generation()
-	end
-
- --if player will end the game this will pop-up
-	if t%60==59 and main.game==true then
-	 if objData.total<=5 and bloodTotal==0 then
-		 trace("\nWell done. You're completed the game!",11)
-			reset()
-		end
-	end
 end
 
 --loading algorythm of map preview in main screen
@@ -1522,219 +1273,156 @@ function map_preview()
 	mapc.mapTimer=mapc.mapTimer+1
 end
 
---when player activate text editing this launches and let player change and save text
 function keyboard_action()
- if main.isPc==false then
-		if keypKeys[1]=="Q" and keyboard.isShift==false then
-	  for i=1,26 do
-		  keypKeys[i]=string.lower(keypKeys[i])
- 		end
-	 end
- 	if keyboard.text~=nil then
-	  keyboard.textLenght=string.len(keyboard.text)
-  else
-	  keyboard.textLenght=0
-		 keyboard.text=""
- 	end
-	 if m.bl==true and m.tl==true then
-			m.tl=false
- 		if keyboard.textLenght<keyboard.maximal_string then
-    for i=10,220,22 do
-	    if m.x>i and m.x<i+16 and m.y>56 and m.y<72 then
-      if settings.sounds==true then
-				 	 sfxPlay(13,"E-4",-1,0,15,0)
-					 end
- 					if keyboard.isNumeric==false then
-	 				 keyboard.text=keyboard.text..keypKeys[i//22+1]
-		 		 	keyboard.pressed=keypKeys[i//22+1]
- 		    break
-				 	else
-					  if (i//22+1)==10 then
-						  var=0
- 						else
-	 					 var=i//22+1
-		 			 end
-			 			keyboard.text=keyboard.text..var
-				 		keyboard.pressed=keypKeys[i//22+1]
-					  break
- 					end
-	  		end
-		  end
- 		 for i=21,212,22 do
-	 	  if m.x>i and m.x<i+16 and m.y>78 and m.y<94 then
-		 	  if settings.sounds==true then
-					  sfxPlay(13,"E-4",-1,0,15,0)
- 					end
-	 				keyboard.text=keyboard.text..keypKeys[i//22+11]
-		 	  keyboard.pressed=keypKeys[i//22+11]
-			 		break
-				 end
-  		end
-	 		for i=32,170,22 do
-		 	 if m.x>i and m.x<i+16 and m.y>100 and m.y<116 then
-			 	 if settings.sounds==true then
-				 	 sfxPlay(13,"E-4",-1,0,15,0)
-					 end
- 					keyboard.text=keyboard.text..keypKeys[i//22+19]
-	 				keyboard.pressed=keypKeys[i//22+19]
-		 		 break
-			 	end
- 			end
-	 		if m.x>76 and m.x<188 and m.y>120 and m.y<136 then
-		 	 if settings.sounds==true then
-			 	 sfxPlay(13,"E-4",-1,0,15,0)
-				 end
- 				keyboard.text=keyboard.text.." "
-	 			keyboard.pressed="space"
-		 	end
- 	 end
-   if m.x>186 and m.x<202 and m.y>100 and m.y<116 then
-		  if settings.sounds==true then
-			  sfxPlay(13,"E-4",-1,0,15,0)
- 		 end
-	 		keyboard.pressed="BS"
-		 	for i=1,keyboard.textLenght do
-			  keyboard_buffer[i]=string.byte(keyboard.text,i)
- 		 end
-	 		keyboard.text=""
-		 	for i=1,keyboard.textLenght-1 do
-			  keyboard.text=keyboard.text..string.char(keyboard_buffer[i])
- 	  end
-	 		for i=1,keyboard.textLenght do
-		 	 keyboard_buffer[i]=nil
-			 end
- 		end
-	 	if m.x>10 and m.x<26 and m.y>100 and m.y<116 then
-		  if settings.sounds==true then
-			  sfxPlay(13,"E-4",-1,0,15,0)
- 			end
-	 		if keyboard.isShift==false then
-		 	 keyboard.isShift=true
-			 	if keypKeys[1]=="q" then
-		 	  for i=1,26 do
-			 	  keypKeys[i]=string.upper(keypKeys[i])
- 				 end
-	 		 end
-		 	else
-			  keyboard.isShift=false
-				 if keypKeys[1]=="Q" then
-				  for i=1,26 do
-					  keypKeys[i]=string.lower(keypKeys[i])
- 					end
-	 			end
-		 	end
- 		elseif m.x>21 and m.x<37 and m.y>120 and m.y<136 then
-	 	 if settings.sounds==true then
-		 	 sfxPlay(13,"E-4",-1,0,15,0)
-			 end
- 			if keyboard.isNumeric==false then
-	 		 keyboard.isNumeric=true
-		 	else
-			  keyboard.isNumeric=false
- 			end
-	 	end
-	  if m.x>216 and m.x<232 and m.y>84 and m.y<116 then
-			 if settings.sounds==true then
-			  sfxPlay(13,"E-4",-1,0,15,0)
- 			end
-	 		if keyboard.id==1 then
-		 	 nickname_buffering("in")
-			 	keyboard.isCalled=false
- 			else
-	 		 notes_num=notes_num+1
-		 		keyboard.text=notes_buffer[notes_num]
-			 end
-   elseif m.x>208 and m.x<216 and m.y>100 and m.y<116 then
-	 		if settings.sounds==true then
-		 	 sfxPlay(13,"E-4",-1,0,15,0)
-			 end
- 			if keyboard.id==1 then
-	 	 	nickname_buffering("in")
-		 		keyboard.isCalled=false
-			 else
-			  notes_num=notes_num+1
- 				keyboard.text=notes_buffer[notes_num]
-	 		end
-		 elseif m.x>199 and m.x<215 and m.y>122 and m.y<136 then
-		  if settings.sounds==true then
-				 sfxPlay(13,"E-4",-1,0,15,0)
- 			end
-	 		keyboard.isCalled=false
-		 	if keyboard.id==2 then
-			  sync(1,0,false)
-			 	sync(32,0,false)
- 			end
-	 	end
- 	end
-	 keyboard.cursor=print(keyboard.text,241,0)*2+10
-		if keyboard.id==1 then
- 	 nickname=keyboard.text
-	 elseif keyboard.id==2 then
-	  notes_buffer[notes_num]=keyboard.text
-	 end
+ if keypKeys[1]=="Q" and keyboard.isShift==false then
+	 for i=1,26 do
+		 keypKeys[i]=string.lower(keypKeys[i])
+		end
+	end
+	if keyboard.text~=nil then
+	 keyboard.textLenght=string.len(keyboard.text)
  else
-	 if not key(64) then
-		 for i=1,26 do
-			 keypKeysPC[i]=string.lower(keypKeysPC[i])
+	 keyboard.textLenght=0
+		keyboard.text=""
+	end
+	if m.bl==true and m.tl==true then
+	 m.tl=false
+		if keyboard.textLenght<keyboard.maximal_string then
+   for i=10,220,22 do
+	   if m.x>i and m.x<i+16 and m.y>56 and m.y<72 then
+     if settings.sounds==true then
+					 sfxPlay(13,"E-4",-1,0,15,0)
+					end
+					if keyboard.isNumeric==false then
+					 keyboard.text=keyboard.text..keypKeys[i//22+1]
+				 	keyboard.pressed=keypKeys[i//22+1]
+ 		   break
+					else
+					 if (i//22+1)==10 then
+						 var=0
+						else
+						 var=i//22+1
+					 end
+						keyboard.text=keyboard.text..var
+						keyboard.pressed=keypKeys[i//22+1]
+					 break
+					end
+	 		end
+		 end
+ 		for i=21,212,22 do
+	 	 if m.x>i and m.x<i+16 and m.y>78 and m.y<94 then
+		 	 if settings.sounds==true then
+					 sfxPlay(13,"E-4",-1,0,15,0)
+					end
+					keyboard.text=keyboard.text..keypKeys[i//22+11]
+			  keyboard.pressed=keypKeys[i//22+11]
+					break
+				end
+ 		end
+			for i=32,170,22 do
+			 if m.x>i and m.x<i+16 and m.y>100 and m.y<116 then
+				 if settings.sounds==true then
+					 sfxPlay(13,"E-4",-1,0,15,0)
+					end
+					keyboard.text=keyboard.text..keypKeys[i//22+19]
+					keyboard.pressed=keypKeys[i//22+19]
+				 break
+				end
 			end
-		elseif key(64) then
-		 for i=1,26 do
-			 keypKeysPC[i]=string.upper(keypKeysPC[i])
+			if m.x>76 and m.x<188 and m.y>120 and m.y<136 then
+			 if settings.sounds==true then
+				 sfxPlay(13,"E-4",-1,0,15,0)
+				end
+				keyboard.text=keyboard.text.." "
+				keyboard.pressed="space"
 			end
-		end
-		for i=1,26 do
-		 if keyp(i) then
-			 keyboard.text=keyboard.text..keypKeysPC[i]
-			end
-		end
-		if keyp(51) then
-		 keyboard.textLenght=string.len(keyboard.text)
+	 end
+  if m.x>186 and m.x<202 and m.y>100 and m.y<116 then
+		 if settings.sounds==true then
+			 sfxPlay(13,"E-4",-1,0,15,0)
+		 end
+			keyboard.pressed="BS"
 			for i=1,keyboard.textLenght do
 			 keyboard_buffer[i]=string.byte(keyboard.text,i)
-			end
-		 keyboard.text=""
+		 end
+			keyboard.text=""
 			for i=1,keyboard.textLenght-1 do
 			 keyboard.text=keyboard.text..string.char(keyboard_buffer[i])
-		 end
+	  end
+			for i=1,keyboard.textLenght do
+			 keyboard_buffer[i]=nil
+			end
 		end
-		if keyp(48) then
-		 keyboard.text=keyboard.text.." "
-		end
-		if keyp(50) then
-			if keyboard.id==1 then
-	 		nickname_buffering("in")
-		 	keyboard.isCalled=false
-			elseif keyboard.id==2 then
-			 if notes_num%8==7 then
-				 tablet.page=tablet.page+1
+		if m.x>10 and m.x<26 and m.y>100 and m.y<116 then
+		 if settings.sounds==true then
+			 sfxPlay(13,"E-4",-1,0,15,0)
+			end
+			if keyboard.isShift==false then
+			 keyboard.isShift=true
+				if keypKeys[1]=="q" then
+		 	 for i=1,26 do
+			 	 keypKeys[i]=string.upper(keypKeys[i])
+				 end
+			 end
+			else
+			 keyboard.isShift=false
+				if keypKeys[1]=="Q" then
+				 for i=1,26 do
+					 keypKeys[i]=string.lower(keypKeys[i])
+					end
 				end
+			end
+		elseif m.x>21 and m.x<37 and m.y>120 and m.y<136 then
+		 if settings.sounds==true then
+			 sfxPlay(13,"E-4",-1,0,15,0)
+			end
+			if keyboard.isNumeric==false then
+			 keyboard.isNumeric=true
+			else
+			 keyboard.isNumeric=false
+			end
+		end
+	 if m.x>216 and m.x<232 and m.y>84 and m.y<116 then
+			if settings.sounds==true then
+			 sfxPlay(13,"E-4",-1,0,15,0)
+			end
+			if keyboard.id==1 then
+			 nickname_buffering("in")
+				keyboard.isCalled=false
+			else
 			 notes_num=notes_num+1
-    keyboard.text=notes_buffer[notes_num]
-			 if keyboard.text==nil then
-				 keyboard.text=""
-				end
+				keyboard.text=notes_buffer[notes_num]
 			end
-		end
-		if m.bl==true and m.tl==true then
-		 m.tl=false
+  elseif m.x>208 and m.x<216 and m.y>100 and m.y<116 then
+			if settings.sounds==true then
+			 sfxPlay(13,"E-4",-1,0,15,0)
+			end
 			if keyboard.id==1 then
-	 		nickname_buffering("in")
-		 	keyboard.isCalled=false
-			elseif keyboard.id==2 then
-			 keyboard.isCalled=false
+		 	nickname_buffering("in")
+				keyboard.isCalled=false
+			else
+			 notes_num=notes_num+1
+				keyboard.text=notes_buffer[notes_num]
+			end
+		elseif m.x>199 and m.x<215 and m.y>122 and m.y<136 then
+		 if settings.sounds==true then
+				sfxPlay(13,"E-4",-1,0,15,0)
+			end
+			keyboard.isCalled=false
+			if keyboard.id==2 then
+			 sync(1,0,false)
+				sync(32,0,false)
 			end
 		end
-		if keyboard.id==1 then
-		 nickname=keyboard.text
-		 keyboard.cursor=print(nickname,241,0)+45-textlenght[7]//2
-		elseif keyboard.id==2 then
-		 notes_buffer[notes_num]=keyboard.text
-	  keyboard.cursor=print(notes_buffer[notes_num],241,0)+60
-		end
+	end
+	keyboard.cursor=print(keyboard.text,241,0)*2+10
+	if keyboard.id==1 then
+	 nickname=keyboard.text
+	elseif keyboard.id==2 then
+	 notes_buffer[notes_num]=keyboard.text
 	end
 end
 
---loading data from storage when game is launched
 function pmeming()
  if pmem(255)~=0 then
 	 settings.customNick=true
@@ -1747,14 +1435,13 @@ function pmeming()
 	else
 	 settings.sounds=false
 	end
-	if pmem(252)~=1 then
-	 main.isConfig=false
+	if pmem(252)~=0 then
+	 main.hasSave=true
 	else
-	 main.isConfig=true
+	 main.hasSave=false
 	end
 end
 
---saving/loading player nickname
 function nickname_buffering(in_out)
  var=0
  if pmem(200)~=0 and in_out=="out" then
@@ -1789,7 +1476,6 @@ function nickname_buffering(in_out)
 	end
 end
 
---launches everytime when player step in blood, printing all the footsteps
 function func_footprint()
  for i=1,bloodTotal do
  	if blood[i]~=nil then
@@ -1826,10 +1512,6 @@ end
 
 --everything in this function calls once before TIC()
 function init()
- keypKeysPC[64]="SHIFT"
-	keypKeysPC[48]="SPACE"
-	keypKeysPC[51]="BACKSPACE"
-	keypKeysPC[50]="ENTER"
 	sync(1,6,false)
 	sync(2,6,false)
 	sync(4,6,false)
@@ -1850,7 +1532,6 @@ function init()
 	if pmem(200)~=0 then
  	nickname_buffering("out")
 	end
-	notes_buffer[0]="    Your notes here!"
 end
 
 init()
