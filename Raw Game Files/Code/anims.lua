@@ -2,82 +2,6 @@
 --players animations and actions bank---
 ----------------------------------------
 
---the name says about itself
-function player_additionalAnim()
- --resets player animation if it launched too long
- if main.game==true then
-  if p.animTimer<time() then
-	  p.use=""
- 	end
-
-  --swipes object that player has in his hands
-  if p.isHold==true then
-		 if p.angle==0 then
-			 var1=4
-				var2=10
-			elseif p.angle==1 then
-			 var1=-2
-				var2=4
-			elseif p.angle==2 then
-			 var1=4
-				var2=-2
-			else
-			 var1=10
-				var2=4
-			end
-	 	o[p.objectID][2]=p.x+var1+p.vx
-		 o[p.objectID][3]=p.y+var2+p.vy
-			o[p.objectID][7]=p.angle
-			p.humanHold=p.objectID
-		end
-
-	 --dispenser objects
-		if dispensers.timer<122 then
-		 dispensers.timer=dispensers.timer+1
-			if dispensers.timer==1 then
-		 	if o[dispensers.dispenser][12]=="dispenser trash" then
- 		 	if o[dispensers.dispenser][7]==0 or o[dispensers.dispenser][7]==2 then
-		 	  var1=-0.1
-			 	 var2=0
-	  		else
-		  	 var1=0
-	 		 	var2=-0.1
-		  	end
-				elseif o[dispensers.dispenser][12]=="dispenser water" then
-				 var3=dispensers.dispenser
-					if o[var3][7]==0 then
-					 var1=0.1
-						var2=0
-					elseif o[var3][7]==1 then
-					 var1=0
-						var2=0.1
-					elseif o[var3][7]==2 then
-					 var1=-0.1
-						var2=0
-					else
-					 var1=0
-						var2=-0.1
-					end
-				end
-			elseif dispensers.timer==122 and o[dispensers.object][12]~="bin" and o[dispensers.object][12]~="bucket" then
-			 bloodTotal=bloodTotal+1
-				blood[bloodTotal]={}
-				blood[bloodTotal][1]=o[dispensers.object][2]
-				blood[bloodTotal][2]=o[dispensers.object][3]
-				blood[bloodTotal][3]=math.random(0,3)
-				blood[bloodTotal][4]=260
-			else
-			 if settings.sounds==true then
-			 	sfxPlay(6,"C-1",-1,1,15,0,-3)
-				end
-			 o[dispensers.object][2]=o[dispensers.object][2]+var1
-		  o[dispensers.object][3]=o[dispensers.object][3]+var2
-			end
-		end
-	end
-end
-
---change instruments in order
 function player_changeInstrument()
  if p.isMop==true then
 	 p.isMop=false
@@ -99,7 +23,6 @@ function player_changeInstrument()
  end
 end
 
---animations for player movement
 function player_hudMove()
  if settings.sounds==true then
   if t%30//5==3 then
@@ -127,7 +50,6 @@ function player_hudMove()
 	end
 end
 
---this is how player looks when he do nothing
 function player_hudIdle()
  if p.isMop==true then
 	 spr(402,112+p.x-mapc.camX,56+p.y-mapc.camY,11,1,0,p.angle,2,2)
@@ -142,7 +64,6 @@ function player_hudIdle()
 	end
 end
 
---animations when player do some activity (trying to lift the object or to remove the blood)
 function player_hudactivity(mop,hand,detect,tablet,use)
  if mop==true then
 	 spr(434,112+p.x-mapc.camX,56+p.y-mapc.camY,11,1,0,p.angle,2,2)
@@ -157,16 +78,16 @@ function player_hudactivity(mop,hand,detect,tablet,use)
 	end
 end
 
---when player doing something
+--when player do something
 function player_isDo(mop,hand,detect,tableted,use)
  if mop==true and use=="prim" then
 	 if settings.sounds==true then
 		 sfxPlay(2,"F-2",-1,1,15,1,"F-2","a#2")
 		end
-		for i=0,bloodTotal do
-			if blood[i]~=nil and math.floor(p.mopDirtiness)+math.floor((p.mopDirtiness-math.floor(p.mopDirtiness))*10)<7 then
-				if p.x>blood[i][1]-16 and p.x<blood[i][1]+8 and p.y>blood[i][2]-16 and p.y<blood[i][2]+8 then
-					if bloodTotal>0 then
+		for i=1,bloodTotal do
+ 	 if blood[i]~=nil and math.floor(p.mopDirtiness)+math.floor((p.mopDirtiness-math.floor(p.mopDirtiness))*10)<7 then
+    if p.x>blood[i][1]-16 and p.x<blood[i][1]+8 and p.y>blood[i][2]-16 and p.y<blood[i][2]+8 then
+					if bloodTotal>1 then
 					 if blood[i][4]==260 or blood[i][4]==261 then
  					 p.mopDirtiness=p.mopDirtiness+1
 		 			else
@@ -194,6 +115,10 @@ function player_isDo(mop,hand,detect,tableted,use)
 		     end
 						end
 				  break
+ 	 	 else
+					 traceDo("Done",11)
+						exit()
+						break
 					end
 				end
 	  elseif math.floor(p.mopDirtiness)+math.floor((p.mopDirtiness-math.floor(p.mopDirtiness))*10)>=7 and bloodTotal<bloodLimit then
@@ -669,7 +594,7 @@ function player_isDo(mop,hand,detect,tableted,use)
 						var=0
 					 break
 					end
-				elseif o[i][1]==130 or o[i][1]==131 or o[i][1]==132 or o[i][1]==133 or o[i][1]==134 or o[i][1]==135 or o[i][1]==136 or o[i][1]==137 or o[i][1]==138 then
+				elseif o[i][1]>=130 and o[i][1]<=140 then
 				 if tabletBase[13][7]==false then
 					 tabletBase[13][7]=true
 						var=0
@@ -700,109 +625,106 @@ end
 
 --checking player floor state
 function player_flooring()
- if main.game==true then
- 	getted=mget(((p.x+4)//8),(p.y//8))
-	 if getted==14 or getted==15 then
-	  if p.floor==1 then
-		  p.x=p.x+240*4
- 			mapc.camX=mapc.camX+240*4
-	 		p.floor=2
-		 elseif p.floor==2 then
-		  p.x=p.x-240*4
- 			mapc.camX=mapc.camX-240*4
-	 		p.floor=1
-		 end
- 	elseif getted==0 then
-	  if mget(p.x//8+1,p.y//8)==0 and mget(p.x//8,p.y//8+1)==0 and mget(p.x//8+1,p.y//8+1)==0 then
-		  if p.floor==2 then
-			  p.x=p.x-240*4
-				 mapc.camX=mapc.camX-240*4
- 				p.floor=1
-	 			if p.isHold==true and math.random(0,100)<=40 then
-		 		 if p.angle==0 then
-			 	  o[p.objectID][2]=p.x+4
-				 		o[p.objectID][3]=p.y+12
-					 elseif p.angle==1 then
-					  o[p.objectID][2]=p.x-4
-	 					o[p.objectID][3]=p.y+4
- 					elseif p.angle==2 then
-		 			 o[p.objectID][2]=p.x+4
-			 			o[p.objectID][3]=p.y-4
-				 	else
-					  o[p.objectID][2]=p.x+12
-						 o[p.objectID][3]=p.y+4
- 					end
-	 				if o[p.objectID][12]=="bin" then
-		 			 for i=1,1000 do
-			 			 if o[p.objectID][16][2][1]~=nil then
-				 			 for b=1,objData.total do
-					 			 if o[b][15]==o[p.objectID][16][2][1] then
-						 			 o[b][2]=o[p.objectID][2]+math.random(-4,4)
-							 			o[b][3]=o[p.objectID][3]+math.random(-4,4)
-					      if settings.sounds==true then
-						      sfxPlay(2,"F-2",-1,1,15,-2,"F-2","a#2")
-						     end
- 										for h=264,270 do
-	 									 if o[b][1]==h then
-		 									 bloodTotal=bloodTotal+1
-			 									blood[bloodTotal]={}
-				 								blood[bloodTotal][1]=o[b][2]
-					 							blood[bloodTotal][2]=o[b][3]
-						 						blood[bloodTotal][3]=math.random(0,3)
-							 					blood[bloodTotal][4]=260
-								 			 break
-									 		end
-										 end
- 										o[p.objectID][16][1]=0
-	 									table.remove(o[p.objectID][16][2],1)
-		 								break
-			 						end
-				 				end
-					 		else
-						 	 break
-							 end
- 						end
-	 					o[p.objectID][1]=150
- 		 		elseif o[p.objectID][12]=="bucket" then
-	 		 	 o[p.objectID][1]=140
-		 				if settings.sounds==true then
-			 	 	 sfxPlay(2,"F-2",-1,1,15,-2,"F-2","a#2")
-						 end
- 						for i=1,o[p.objectID][16][1]+o[p.objectID][16][2] do
-	 					 bloodTotal=bloodTotal+1
-		 					blood[bloodTotal]={}
-			 				blood[bloodTotal][1]=o[p.objectID][2]+math.random(-4,4)
-				 			blood[bloodTotal][2]=o[p.objectID][3]+math.random(-4,4)
-					 		blood[bloodTotal][3]=math.random(0,3)
-						 	blood[bloodTotal][4]=260
- 						end
-	 					o[p.objectID][16][1]=-1
-		 				o[p.objectID][16][2]=-1
-			 		end
-				 	for i=264,270 do
-				  	if o[p.objectID][1]==i then
-						  bloodTotal=bloodTotal+1
-							 blood[bloodTotal]={}
- 							blood[bloodTotal][1]=o[b][2]
-	 						blood[bloodTotal][2]=o[b][3]
-		 					blood[bloodTotal][3]=math.random(0,3)
-			 				blood[bloodTotal][4]=260
-				 			break
-					 	end
- 					end
-	 				p.isHold=false
-		 			p.objectID=0
-			 	end
-	 		end
-		 end
-	 end
- end
+ getted=mget(((p.x+4)//8),(p.y//8))
+	if getted==14 or getted==15 then
+	 if p.floor==1 then
+		 p.x=p.x+240*4
+			mapc.camX=mapc.camX+240*4
+			p.floor=2
+		elseif p.floor==2 then
+		 p.x=p.x-240*4
+			mapc.camX=mapc.camX-240*4
+			p.floor=1
+		end
+	elseif getted==0 then
+	 if mget(p.x//8+1,p.y//8)==0 and mget(p.x//8,p.y//8+1)==0 and mget(p.x//8+1,p.y//8+1)==0 then
+		 if p.floor==2 then
+			 p.x=p.x-240*4
+				mapc.camX=mapc.camX-240*4
+				p.floor=1
+				if p.isHold==true and math.random(0,100)<=40 then
+				 if p.angle==0 then
+				  o[p.objectID][2]=p.x+4
+						o[p.objectID][3]=p.y+12
+					elseif p.angle==1 then
+					 o[p.objectID][2]=p.x-4
+						o[p.objectID][3]=p.y+4
+					elseif p.angle==2 then
+					 o[p.objectID][2]=p.x+4
+						o[p.objectID][3]=p.y-4
+					else
+					 o[p.objectID][2]=p.x+12
+						o[p.objectID][3]=p.y+4
+					end
+					if o[p.objectID][12]=="bin" then
+					 for i=1,1000 do
+						 if o[p.objectID][16][2][1]~=nil then
+							 for b=1,objData.total do
+								 if o[b][15]==o[p.objectID][16][2][1] then
+									 o[b][2]=o[p.objectID][2]+math.random(-4,4)
+										o[b][3]=o[p.objectID][3]+math.random(-4,4)
+					     if settings.sounds==true then
+						     sfxPlay(2,"F-2",-1,1,15,-2,"F-2","a#2")
+						    end
+										for h=264,270 do
+										 if o[b][1]==h then
+											 bloodTotal=bloodTotal+1
+												blood[bloodTotal]={}
+												blood[bloodTotal][1]=o[b][2]
+												blood[bloodTotal][2]=o[b][3]
+												blood[bloodTotal][3]=math.random(0,3)
+												blood[bloodTotal][4]=260
+											 break
+											end
+										end
+										o[p.objectID][16][1]=0
+										table.remove(o[p.objectID][16][2],1)
+										break
+									end
+								end
+							else
+							 break
+							end
+						end
+						o[p.objectID][1]=150
+					elseif o[p.objectID][12]=="bucket" then
+					 o[p.objectID][1]=140
+						if settings.sounds==true then
+						 sfxPlay(2,"F-2",-1,1,15,-2,"F-2","a#2")
+						end
+						for i=1,o[p.objectID][16][1]+o[p.objectID][16][2] do
+						 bloodTotal=bloodTotal+1
+							blood[bloodTotal]={}
+							blood[bloodTotal][1]=o[p.objectID][2]+math.random(-4,4)
+							blood[bloodTotal][2]=o[p.objectID][3]+math.random(-4,4)
+							blood[bloodTotal][3]=math.random(0,3)
+							blood[bloodTotal][4]=260
+						end
+						o[p.objectID][16][1]=-1
+						o[p.objectID][16][2]=-1
+					end
+					for i=264,270 do
+				 	if o[p.objectID][1]==i then
+						 bloodTotal=bloodTotal+1
+							blood[bloodTotal]={}
+							blood[bloodTotal][1]=o[b][2]
+							blood[bloodTotal][2]=o[b][3]
+							blood[bloodTotal][3]=math.random(0,3)
+							blood[bloodTotal][4]=260
+							break
+						end
+					end
+					p.isHold=false
+					p.objectID=0
+				end
+			end
+		end
+	end
 end
 
---working if player enabled sniffer on first or second range channel. Searching for blood or trash
 function player_detect()
  sniffer.t=sniffer.t+1
- sniffer.dist=999999
+ sniffer.dist=99999999
  if sniffer.isBloodOn==true then
 	 for i=1,bloodTotal do
 		 sniffer.detecting=math.sqrt((p.x+4-blood[i][1])*(p.x+4-blood[i][1])+(p.y+4-blood[i][2])*(p.y+4-blood[i][2]))
@@ -841,15 +763,6 @@ function player_detect()
 	 if sniffer.t%120==119 then
 			sfxPlay(varSniff1,varSniff2,-1,1,15,1)
 		 sniffer.t=0
-		end
-	end
-end
-
---checks if player enabled sniffer
-function player_snifferEnabled()
- if main.game==true then
-  if p.isDetector==true and sniffer.isBloodOn==true or sniffer.isTrashOn==true then
-		 player_detect()
 		end
 	end
 end
