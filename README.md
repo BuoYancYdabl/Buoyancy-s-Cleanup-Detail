@@ -5,8 +5,6 @@ Last [release](https://github.com/BuoYancYdabl/Buoyancy-s-Cleanup-Detail/release
 
 **The development is currently suspended. Await further updates about development.**
 
-Important note about update: after 24.02.2022 when Russia attacked Ukraine Im cancelling the russian localisation update and frozing the development for uknown time.
-
 **Game contain inapropriate graphics: blood, slaughter and war-posible thematic!**
 
 Play and download game trought browser [here](https://tic.computer/play?cart=879).
